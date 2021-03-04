@@ -13,7 +13,9 @@ namespace SeleniumTests
         [SetUp]
         public void SetupTest()
         {
-            driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArguments("headless");
+            driver = new ChromeDriver(options);
             
         }
         [TearDown]
@@ -35,12 +37,14 @@ namespace SeleniumTests
             driver.Navigate().GoToUrl("http://www.google.com/");
 
             int size = driver.FindElements(By.XPath(".//*[iframe]")).Count;
-
-            driver.SwitchTo().Frame(0);
-            Boolean isPresent = driver.FindElements(By.Id("introAgreeButton")).Count > 0;
-            if(isPresent)
+            if (size > 0)
             {
-                driver.FindElement(By.Id("introAgreeButton")).Click();
+                driver.SwitchTo().Frame(0);
+                Boolean isPresent = driver.FindElements(By.Id("introAgreeButton")).Count > 0;
+                if(isPresent)
+                {
+                    driver.FindElement(By.Id("introAgreeButton")).Click();
+                }
             }
 
             // Assert Title of page.
